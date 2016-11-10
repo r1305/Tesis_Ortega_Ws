@@ -64,8 +64,7 @@ public class Conexion {
 
             while (rs.next()) {
                 JSONObject o = new JSONObject();
-                o.put("nombre", rs.getString("nombre"));
-                o.put("apellido", rs.getString("apellidos"));
+                o.put("nombre", rs.getString("nombres"));
                 o.put("puntaje", rs.getFloat("puntaje"));
                 ja.add(o);
 
@@ -176,7 +175,7 @@ public class Conexion {
         return rpta;
     }
     
-    public String getActividades(int nivel){
+    public String getActividades(int nivel,String correo){
         Connection cn;
         Conexion con = new Conexion();
         ResultSet rs;
@@ -188,7 +187,7 @@ public class Conexion {
             //String sql = "SELECT * FROM actividades where puntuacion>=" + puntuacion+" and fecha>=current_date()";
             String sql = "";
 
-            sql = "SELECT * FROM actividad where id_nivel="+nivel;
+            sql = "SELECT * FROM actividad where id_actividad not in (select id_actividad from actividad_realizada where id_jugador='"+correo+"') and id_nivel="+nivel;
             pr = cn.prepareStatement(sql);
             rs = pr.executeQuery();
 

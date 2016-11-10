@@ -37,7 +37,7 @@ public class GetRetos extends HttpServlet {
         System.out.println("punt: "+punt);
         int nivel=con.getNivel(punt);
         System.out.println("nivel: "+nivel);
-        String rpta=con.getActividades(nivel);
+        String rpta=con.getActividades(nivel,correo);
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
