@@ -36,6 +36,14 @@
         <servlet-name>Progreso</servlet-name>
         <servlet-class>tesis.servlets.Progreso</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Trofeos</servlet-name>
+        <servlet-class>tesis.servlets.Trofeos</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetTrofeos</servlet-name>
+        <servlet-class>tesis.servlets.GetTrofeos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Ranking</servlet-name>
         <url-pattern>/ranking</url-pattern>
@@ -71,6 +79,14 @@
     <servlet-mapping>
         <servlet-name>Progreso</servlet-name>
         <url-pattern>/Progreso</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Trofeos</servlet-name>
+        <url-pattern>/Trofeos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetTrofeos</servlet-name>
+        <url-pattern>/getTrofeos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

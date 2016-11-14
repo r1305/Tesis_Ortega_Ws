@@ -198,7 +198,8 @@ public class Conexion {
                 o.put("descripcion", rs.getString("descripcion"));
                 o.put("repeticiones",rs.getString("repeticiones"));
                 o.put("imagen", rs.getString("imagen"));
-                o.put("tiempo", rs.getInt("tiempo"));          
+                o.put("tiempo", rs.getInt("tiempo"));  
+                o.put("tipo",rs.getInt("id_tipo"));
                 o.put("punt",rs.getInt("puntaje"));
                 ja.add(o);
             }
@@ -257,7 +258,8 @@ public class Conexion {
             pr.setString(3, psw);
             pr.setFloat(4, peso);
             pr.setInt(5, altura);
-            pr.setFloat(6, (Float.parseFloat(String.valueOf(peso/(Math.pow(altura/100, 2))))));
+            double imc=peso/(Math.pow(altura/100, 2));
+            pr.setFloat(6,Float.parseFloat(String.valueOf(imc)));
             pr.executeUpdate();
         }catch(Exception e){
             ok=false;
@@ -384,6 +386,166 @@ public class Conexion {
                 ja.add(o);
             }
             ob.put("progreso", ja);
+            rs.close();
+            pr.close();
+            cn.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return ob.toString();
+    }
+    
+    public boolean cardio(String correo){
+        boolean ok=false;
+        int count=0;
+        Connection cn;
+        Conexion con = new Conexion();
+        ResultSet rs;
+        PreparedStatement pr;
+        try {
+            cn = con.getConexion();
+            //String sql = "SELECT * FROM actividades where puntuacion>=" + puntuacion+" and fecha>=current_date()";
+            String sql = "";
+
+            
+                sql = "select count(*) from actividad_realizada ar join actividad act on ar.id_actividad=act.id_actividad where ar.id_jugador='"+correo+"' and act.id_tipo=1;";
+            
+            pr = cn.prepareStatement(sql);
+            rs = pr.executeQuery();
+
+            while (rs.next()) {
+                count=rs.getInt(1);
+            }
+            if(count>=3 && count%3==0){
+                ok=true;
+                insertCardio(correo);
+            }else{
+                ok=false;
+            }
+            rs.close();
+            pr.close();
+            cn.close();
+        } catch (Exception ex) {
+            ok=false;
+            System.out.println(ex);
+        }
+        return ok;
+    }
+    
+    public void insertCardio(String correo){
+        Connection cn;
+        Conexion con = new Conexion();
+        PreparedStatement pr;
+        try{
+            cn=con.getConexion();
+            String sql="insert into trofeo_jugador (id_jugador,id_trofeo,fecha) values('"+correo+"',"+1+",current_date())";
+            pr=cn.prepareStatement(sql);
+            pr.executeUpdate();
+        }catch(Exception e){
+            System.out.println("cardio: "+e);
+        }
+    }
+        
+    public boolean resistencia(String correo){
+        boolean ok=false;
+        int count=0;
+        Connection cn;
+        Conexion con = new Conexion();
+        ResultSet rs;
+        PreparedStatement pr;
+        try {
+            cn = con.getConexion();
+            //String sql = "SELECT * FROM actividades where puntuacion>=" + puntuacion+" and fecha>=current_date()";
+            String sql = "";
+
+            
+                sql = "select count(*) from actividad_realizada ar join actividad act on ar.id_actividad=act.id_actividad where ar.id_jugador='"+correo+"' and act.id_tipo=4;";
+            
+            pr = cn.prepareStatement(sql);
+            rs = pr.executeQuery();
+
+            while (rs.next()) {
+                count=rs.getInt(1);
+            }
+            if(count>=3 && count%3==0){
+                ok=true;
+                inserResistencia(correo);
+            }else{
+                ok=false;
+            }
+            rs.close();
+            pr.close();
+            cn.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return ok;
+    }
+    
+    public void inserResistencia(String correo){
+        Connection cn;
+        Conexion con = new Conexion();
+        PreparedStatement pr;
+        try{
+            cn=con.getConexion();
+            String sql="insert into trofeo_jugador (id_jugador,id_trofeo,fecha) values('"+correo+"',"+3+",current_date())";
+            pr=cn.prepareStatement(sql);
+            pr.executeUpdate();
+        }catch(Exception e){
+            System.out.println("resistencia: "+e);
+        }
+    }
+    
+    public void insert_250(String correo){
+        Connection cn;
+        Conexion con = new Conexion();
+        PreparedStatement pr;
+        try{
+            cn=con.getConexion();
+            String sql="insert into trofeo_jugador (id_jugador,id_trofeo,fecha) values('"+correo+"',"+2+",current_date())";
+            pr=cn.prepareStatement(sql);
+            pr.executeUpdate();
+        }catch(Exception e){
+            System.out.println("250: "+e);
+        }
+    }
+    
+    public void insert_500(String correo){
+        Connection cn;
+        Conexion con = new Conexion();
+        PreparedStatement pr;
+        try{
+            cn=con.getConexion();
+            String sql="insert into trofeo_jugador (id_jugador,id_trofeo,fecha) values('"+correo+"',"+4+",current_date())";
+            pr=cn.prepareStatement(sql);
+            pr.executeUpdate();
+        }catch(Exception e){
+            System.out.println("500: "+e);
+        }
+    }
+    
+    public String getTrofeos(String correo){
+        Connection cn;
+        Conexion con = new Conexion();
+        ResultSet rs;
+        PreparedStatement pr;
+        JSONObject ob = new JSONObject();
+        JSONArray ja = new JSONArray();
+        try {
+            cn = con.getConexion();
+            //String sql = "SELECT * FROM actividades where puntuacion>=" + puntuacion+" and fecha>=current_date()";
+            String sql = "";
+
+            sql = "select nombre from trofeo t join trofeo_jugador tj on tj.id_trofeo=t.id_trofeo where tj.id_jugador='"+correo+"';";
+            pr = cn.prepareStatement(sql);
+            rs = pr.executeQuery();
+
+            while (rs.next()) {                
+                JSONObject o = new JSONObject();
+                o.put("nombre",rs.getInt("nombre"));
+                ja.add(o);
+            }
+            ob.put("trofeos", ja);
             rs.close();
             pr.close();
             cn.close();
